@@ -1,4 +1,5 @@
 "use client";
+
 import BlurImage from "./BlurImage";
 import Navbar from "./Navbar";
 
@@ -16,11 +17,11 @@ const Gallery = () => {
     setIsLoading(true);
     try {
       const response = await fetch(
-        `https://api.unsplash.com/${
+        `${process.env.NEXT_PUBLIC_URL}${
           search ? "search/" : ""
-        }photos?client_id=5B0mat69z4FPMwxJ5FXZHR3ZqXoKJEIk6ojkbtr7AJM&client_secret=1UPNAZPYIvL1bR3_vvx2iWnxOOhFlaJTN0nsXakbPB0&per_page=24&page=${page}${
-          search ? "&query=" + search : ""
-        }`
+        }photos?client_id=${process.env.NEXT_PUBLIC_CLIENT_ID}&client_secret=${
+          process.env.NEXT_PUBLIC_CLIENT_SECRET
+        }&per_page=24&page=${page}${search ? "&query=" + search : ""}`
       );
       const newData = await response.json();
       const finalData = newData.results ? newData.results : newData;
@@ -57,7 +58,11 @@ const Gallery = () => {
     setData([]);
 
     const response = await fetch(
-      `https://api.unsplash.com/search/photos?client_id=5B0mat69z4FPMwxJ5FXZHR3ZqXoKJEIk6ojkbtr7AJM&client_secret=1UPNAZPYIvL1bR3_vvx2iWnxOOhFlaJTN0nsXakbPB0&per_page=24&page=${page}&query=${q}`
+      `${process.env.NEXT_PUBLIC_URL}${
+        search ? "search/" : ""
+      }photos?client_id=${process.env.NEXT_PUBLIC_CLIENT_ID}&client_secret=${
+        process.env.NEXT_PUBLIC_CLIENT_SECRET
+      }&per_page=24&&page=${page}&query=${q}`
     );
     const searchData = await response.json();
     setData(searchData.results);
