@@ -1,0 +1,87 @@
+"use client";
+import BlurImage from "./BlurImage";
+import Navbar from "./Navbar";
+
+import { useEffect, useState } from "react";
+
+const Gallery = () => {
+  const [search, setSearch] = useState("");
+
+  const [data, setData] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [page, setPage] = useState(1);
+
+  const fetchData = async () => {
+    setIsLoading(true);
+    try {
+      const response = await fetch(
+        `https://api.unsplash.com/${
+          search ? "search/" : ""
+        }photos?client_id=5B0mat69z4FPMwxJ5FXZHR3ZqXoKJEIk6ojkbtr7AJM&client_secret=1UPNAZPYIvL1bR3_vvx2iWnxOOhFlaJTN0nsXakbPB0&per_page=24&page=${page}${
+          search ? "&query=" + search : ""
+        }`
+      );
+      const newData = await response.json();
+      const finalData = newData.results ? newData.results : newData;
+      setIsLoading(false);
+      setData((prevItems) => [...prevItems, ...finalData]);
+      setPage((prevPage) => prevPage + 1);
+    } catch (error) {
+      setError(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  const handleScroll = () => {
+    if (
+      window.innerHeight + document.documentElement.scrollTop !==
+        document.documentElement.offsetHeight ||
+      isLoading
+    ) {
+      return;
+    }
+    fetchData();
+  };
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [isLoading]);
+
+  const searchImages = async (q) => {
+    setIsLoading(true);
+    setData([]);
+
+    const response = await fetch(
+      `https://api.unsplash.com/search/photos?client_id=5B0mat69z4FPMwxJ5FXZHR3ZqXoKJEIk6ojkbtr7AJM&client_secret=1UPNAZPYIvL1bR3_vvx2iWnxOOhFlaJTN0nsXakbPB0&per_page=24&page=${page}&query=${q}`
+    );
+    const searchData = await response.json();
+    setData(searchData.results);
+    setIsLoading(false);
+  };
+
+  return (
+    <>
+      <Navbar
+        searchImages={searchImages}
+        search={search}
+        setSearch={setSearch}
+      />
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        {data.map((item) => (
+          <BlurImage
+            key={item.id}
+            image={item.urls.small}
+            alt={item.alt_description}
+          />
+        ))}
+      </div>
+    </>
+  );
+};
+
+export default Gallery;
