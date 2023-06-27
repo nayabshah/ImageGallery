@@ -3,7 +3,13 @@ import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { useEffect } from "react";
 
-const Navbar = ({ searchImages, search, setSearch }) => {
+type NavData = {
+  searchImages: (a: string) => void;
+  search: string;
+  setSearch: (a: string) => void;
+};
+
+const Navbar = ({ searchImages, search, setSearch }: NavData) => {
   const session = useSession();
   const router = useRouter();
 

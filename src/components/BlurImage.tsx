@@ -2,7 +2,12 @@
 import Image from "next/legacy/image";
 import { useState } from "react";
 
-const BlurImage = ({ image, alt }) => {
+type ImageData = {
+  image: string;
+  alt: string;
+};
+
+const BlurImage = ({ image, alt }: ImageData) => {
   const [isLoading, setLoading] = useState(true);
   return (
     <div
