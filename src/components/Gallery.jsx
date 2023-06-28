@@ -3,8 +3,10 @@
 import BlurImage from "./BlurImage";
 import Navbar from "./Navbar";
 import axios from "axios";
+import Loading from "./Loading";
+import { useInView } from "react-intersection-observer";
 
-import { useEffect, useState, useLayoutEffect } from "react";
+import { useEffect, useState } from "react";
 
 const Gallery = () => {
   const [search, setSearch] = useState("");
@@ -12,6 +14,7 @@ const Gallery = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const [page, setPage] = useState(1);
+  const { ref, inView } = useInView({ threshold: 0 });
 
   const fetchData = async () => {
     try {
@@ -34,24 +37,17 @@ const Gallery = () => {
       setIsLoading(false);
     }
   };
-  const handleScroll = () => {
-    if (
-      window.innerHeight + document.documentElement.scrollTop !==
-      document.documentElement.offsetHeight
-    )
-      return;
-    setIsLoading(true);
-    fetchData();
-  };
+
   useEffect(() => {
     fetchData();
   }, []);
 
   useEffect(() => {
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+    if (inView) {
+      fetchData();
+    }
     // eslint-disable-next-line
-  }, [isLoading]);
+  }, [isLoading, inView]);
 
   const searchImages = async (q) => {
     setIsLoading(true);
@@ -84,6 +80,20 @@ const Gallery = () => {
             alt={item.alt_description}
           />
         ))}
+      </div>
+      <div ref={ref} className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        {isLoading ? (
+          <>
+            <Loading />
+            <Loading />
+
+            <Loading />
+
+            <Loading />
+          </>
+        ) : (
+          ""
+        )}
       </div>
     </>
   );
