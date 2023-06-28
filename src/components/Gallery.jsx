@@ -47,11 +47,9 @@ const Gallery = () => {
     fetchData();
   }, []);
 
-  useEffect(() => {
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-    // eslint-disable-next-line
-  }, [isLoading]);
+  window.addEventListener("scroll", handleScroll);
+
+  // eslint-disable-next-line
 
   const searchImages = async (q) => {
     setIsLoading(true);
