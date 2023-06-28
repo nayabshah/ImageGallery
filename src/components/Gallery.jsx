@@ -12,7 +12,7 @@ const Gallery = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const [page, setPage] = useState(1);
-  console.log(page);
+  // console.log(page);
 
   const fetchData = async () => {
     setIsLoading(true);
@@ -53,6 +53,9 @@ const Gallery = () => {
 
   useEffect(() => {
     window.addEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", () => {
+      console.log("running");
+    });
     return () => window.removeEventListener("scroll", handleScroll);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLoading]);
