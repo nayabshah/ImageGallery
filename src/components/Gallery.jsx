@@ -5,6 +5,7 @@ import Navbar from "./Navbar";
 import axios from "axios";
 import Loading from "./Loading";
 import { useInView } from "react-intersection-observer";
+import { v4 as uuidv4 } from "uuid";
 
 import { useEffect, useState } from "react";
 
@@ -40,6 +41,7 @@ const Gallery = () => {
 
   useEffect(() => {
     fetchData();
+    // eslint-disable-next-line
   }, []);
 
   useEffect(() => {
@@ -47,7 +49,7 @@ const Gallery = () => {
       fetchData();
     }
     // eslint-disable-next-line
-  }, [isLoading, inView]);
+  }, [inView]);
 
   const searchImages = async (q) => {
     setIsLoading(true);
@@ -75,7 +77,7 @@ const Gallery = () => {
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         {data.map((item) => (
           <BlurImage
-            key={item.id}
+            key={uuidv4()}
             image={item.urls.small}
             alt={item.alt_description}
           />
