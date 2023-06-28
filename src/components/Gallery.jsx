@@ -29,8 +29,8 @@ const Gallery = () => {
       const newData = response.data;
       const finalData = newData.results ? newData.results : newData;
       setIsLoading(false);
-      setData((prevItems) => [...new Set([...prevItems, ...finalData])]);
       setPage((prevPage) => prevPage + 1);
+      setData((prevItems) => [...new Set([...prevItems, ...finalData])]);
     } catch (error) {
       console.log(error);
       setError(error);
