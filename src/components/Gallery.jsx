@@ -30,6 +30,7 @@ const Gallery = () => {
       setData((prevItems) => [...new Set([...prevItems, ...finalData])]);
       setPage((prevPage) => prevPage + 1);
     } catch (error) {
+      console.log(error);
       setError(error);
     } finally {
       setIsLoading(false);
