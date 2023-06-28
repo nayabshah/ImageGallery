@@ -43,7 +43,7 @@ const Gallery = () => {
     setIsLoading(true);
     fetchData();
   };
-  useLayoutEffect(() => {
+  useEffect(() => {
     fetchData();
   }, []);
 
@@ -51,7 +51,7 @@ const Gallery = () => {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
     // eslint-disable-next-line
-  }, []);
+  }, [isLoading]);
 
   const searchImages = async (q) => {
     setIsLoading(true);

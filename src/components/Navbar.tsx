@@ -1,7 +1,7 @@
 "use client";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
-import { useLayoutEffect } from "react";
+import { useEffect } from "react";
 
 type NavData = {
   searchImages: (a: string) => void;
@@ -13,7 +13,7 @@ const Navbar = ({ searchImages, search, setSearch }: NavData) => {
   const session = useSession();
   const router = useRouter();
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     if (session?.status !== "authenticated") {
       router.push("/login");
     }
