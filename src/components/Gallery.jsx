@@ -12,6 +12,7 @@ const Gallery = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const [page, setPage] = useState(1);
+  console.log(page);
 
   const fetchData = async () => {
     setIsLoading(true);
@@ -26,7 +27,7 @@ const Gallery = () => {
       const newData = await response.json();
       const finalData = newData.results ? newData.results : newData;
       setIsLoading(false);
-      setData((prevItems) => [...prevItems, ...finalData]);
+      setData((prevItems) => [...new Set([...prevItems, ...finalData])]);
       setPage((prevPage) => prevPage + 1);
     } catch (error) {
       setError(error);
@@ -46,11 +47,13 @@ const Gallery = () => {
   };
   useEffect(() => {
     fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLoading]);
 
   const searchImages = async (q) => {
