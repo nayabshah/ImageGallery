@@ -3,7 +3,7 @@
 import BlurImage from "./BlurImage";
 import Navbar from "./Navbar";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useLayoutEffect } from "react";
 
 const Gallery = () => {
   const [search, setSearch] = useState("");
@@ -12,7 +12,6 @@ const Gallery = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const [page, setPage] = useState(1);
-  // console.log(page);
 
   const fetchData = async () => {
     setIsLoading(true);
@@ -46,9 +45,8 @@ const Gallery = () => {
     }
     fetchData();
   };
-  useEffect(() => {
+  useLayoutEffect(() => {
     fetchData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -91,6 +89,9 @@ const Gallery = () => {
             alt={item.alt_description}
           />
         ))}
+        <>
+          {isLoading ? <BlurImage key="afdsfhadsdk" image="" alt="" /> : null}
+        </>
       </div>
     </>
   );
