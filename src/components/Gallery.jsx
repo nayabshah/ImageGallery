@@ -7,7 +7,7 @@ import Loading from "./Loading";
 import { useInView } from "react-intersection-observer";
 import { v4 as uuidv4 } from "uuid";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useSession } from "next-auth/react";
 
 const Gallery = () => {
@@ -16,7 +16,8 @@ const Gallery = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const [page, setPage] = useState(1);
-  const { ref, inView } = useInView({ threshold: 0 });
+  const [newImages, setNewImages] = useState(false);
+  const mounted = useRef(false);
   const session = useSession();
 
   const fetchData = async () => {
@@ -31,7 +32,7 @@ const Gallery = () => {
       const newData = response.data;
       const finalData = newData.results ? newData.results : newData;
       setIsLoading(false);
-
+      setNewImages(false);
       setData((prevItems) => [...new Set([...prevItems, ...finalData])]);
     } catch (error) {
       console.log(error);
@@ -46,8 +47,7 @@ const Gallery = () => {
       window.innerHeight + window.scrollY >=
       document.body.offsetHeight - 1000
     ) {
-      fetchData();
-      setPage((prevPage) => prevPage + 1);
+      setNewImages(true);
     }
   };
 
@@ -55,13 +55,21 @@ const Gallery = () => {
     if (session?.status === "authenticated") {
       fetchData();
     }
-    // eslint-disable-next-line
-  }, []);
+  }, [page]);
+
+  useEffect(() => {
+    if (!mounted.current) {
+      mounted.current = true;
+      return;
+    }
+    if (!newImages) return;
+    if (isLoading) return;
+    setPage((oldPage) => oldPage + 1);
+  }, [newImages]);
 
   useEffect(() => {
     window.addEventListener("scroll", event);
     return () => window.removeEventListener("scroll", event);
-    // eslint-disable-next-line
   }, []);
 
   const searchImages = async (q) => {
@@ -96,7 +104,7 @@ const Gallery = () => {
           />
         ))}
       </div>
-      <div ref={ref} className="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         {isLoading ? (
           <>
             <Loading />
