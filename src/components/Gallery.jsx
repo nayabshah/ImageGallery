@@ -31,7 +31,7 @@ const Gallery = () => {
       );
       const newData = response.data;
       const finalData = newData.results ? newData.results : newData;
-      setIsLoading(false);
+
       setNewImages(false);
       setData((prevItems) => [...new Set([...prevItems, ...finalData])]);
     } catch (error) {
