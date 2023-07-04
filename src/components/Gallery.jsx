@@ -75,19 +75,24 @@ const Gallery = () => {
   }, []);
 
   const searchImages = async (q) => {
-    setIsLoading(true);
-    setData([]);
+    if (q) {
+      setIsLoading(true);
+      setData([]);
 
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_URL}${
-        search ? "search/" : ""
-      }photos?client_id=${process.env.NEXT_PUBLIC_CLIENT_ID}&client_secret=${
-        process.env.NEXT_PUBLIC_CLIENT_SECRET
-      }&per_page=24&&page=${page}&query=${q}`
-    );
-    const searchData = await response.json();
-    setData(searchData.results);
-    setIsLoading(false);
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_URL}${
+          search ? "search/" : ""
+        }photos?client_id=${process.env.NEXT_PUBLIC_CLIENT_ID}&client_secret=${
+          process.env.NEXT_PUBLIC_CLIENT_SECRET
+        }&per_page=24&&page=${page}&query=${q}`
+      );
+      const searchData = await response.json();
+      setData(searchData.results);
+      setIsLoading(false);
+    } else {
+      setData([]);
+      fetchData();
+    }
   };
 
   return (
