@@ -22,8 +22,8 @@ const Gallery = () => {
       const response = await axios.get(
         `${process.env.NEXT_PUBLIC_URL}${
           search ? "search/" : ""
-        }photos?client_id=${process.env.NEXT_PUBLIC_CLIENT_ID}&client_secret=${
-          process.env.NEXT_PUBLIC_CLIENT_SECRET
+        }photos?client_id=${
+          process.env.NEXT_PUBLIC_CLIENT_ID
         }&per_page=24&page=${page}${search ? "&query=" + search : ""}`
       );
       const newData = response.data;
