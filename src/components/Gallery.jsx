@@ -4,7 +4,6 @@ import BlurImage from "./BlurImage";
 import Navbar from "./Navbar";
 import axios from "axios";
 import Loading from "./Loading";
-import { useInView } from "react-intersection-observer";
 import { v4 as uuidv4 } from "uuid";
 
 import { useEffect, useState, useRef } from "react";
@@ -27,7 +26,7 @@ const Gallery = () => {
           search ? "search/" : ""
         }photos?client_id=${
           process.env.NEXT_PUBLIC_CLIENT_ID
-        }&per_page=24&page=${page}${search ? "&query=" + search : ""}`
+        }&per_page=12&page=${page}${search ? "&query=" + search : ""}`
       );
       const newData = response.data;
       const finalData = newData.results ? newData.results : newData;
@@ -84,7 +83,7 @@ const Gallery = () => {
           search ? "search/" : ""
         }photos?client_id=${process.env.NEXT_PUBLIC_CLIENT_ID}&client_secret=${
           process.env.NEXT_PUBLIC_CLIENT_SECRET
-        }&per_page=24&&page=${page}&query=${q}`
+        }&per_page=12&&page=${page}&query=${q}`
       );
       const searchData = await response.json();
       setData(searchData.results);
