@@ -8,6 +8,7 @@ import { useInView } from "react-intersection-observer";
 import { v4 as uuidv4 } from "uuid";
 
 import { useEffect, useState } from "react";
+import { useSession } from "next-auth/react";
 
 const Gallery = () => {
   const [search, setSearch] = useState("");
@@ -16,6 +17,7 @@ const Gallery = () => {
   const [error, setError] = useState(null);
   const [page, setPage] = useState(1);
   const { ref, inView } = useInView({ threshold: 0 });
+  const session = useSession();
 
   const fetchData = async () => {
     try {
@@ -29,7 +31,7 @@ const Gallery = () => {
       const newData = response.data;
       const finalData = newData.results ? newData.results : newData;
       setIsLoading(false);
-      setPage((prevPage) => prevPage + 1);
+      setPage((prevPage) => prevPage++);
       setData((prevItems) => [...new Set([...prevItems, ...finalData])]);
     } catch (error) {
       console.log(error);
@@ -39,17 +41,27 @@ const Gallery = () => {
     }
   };
 
+  const event = () => {
+    if (
+      window.innerHeight + window.scrollY >=
+      document.body.offsetHeight - 1000
+    ) {
+      fetchData();
+    }
+  };
+
   useEffect(() => {
-    fetchData();
+    if (session?.status === "authenticated") {
+      fetchData();
+    }
     // eslint-disable-next-line
   }, []);
 
   useEffect(() => {
-    if (inView) {
-      fetchData();
-    }
+    window.addEventListener("scroll", event);
+    return () => window.removeEventListener("scroll", event);
     // eslint-disable-next-line
-  }, [inView]);
+  }, []);
 
   const searchImages = async (q) => {
     setIsLoading(true);
