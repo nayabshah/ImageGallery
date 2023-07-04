@@ -58,6 +58,7 @@ const Gallery = () => {
   }, [page]);
 
   useEffect(() => {
+    console.log("running page ");
     if (!mounted.current) {
       mounted.current = true;
       return;
@@ -69,6 +70,7 @@ const Gallery = () => {
 
   useEffect(() => {
     window.addEventListener("scroll", event);
+    console.log("scroll");
     return () => window.removeEventListener("scroll", event);
   }, []);
 
