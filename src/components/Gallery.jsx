@@ -21,12 +21,13 @@ const Gallery = () => {
 
   const fetchData = async () => {
     try {
+      setIsLoading(true);
       const response = await axios.get(
         `${process.env.NEXT_PUBLIC_URL}${
           search ? "search/" : ""
         }photos?client_id=${
           process.env.NEXT_PUBLIC_CLIENT_ID
-        }&per_page=12&page=${page}${search ? "&query=" + search : ""}`
+        }&per_page=16&page=${page}${search ? "&query=" + search : ""}`
       );
       const newData = response.data;
       const finalData = newData.results ? newData.results : newData;
@@ -43,7 +44,7 @@ const Gallery = () => {
 
   const event = () => {
     if (
-      window.innerHeight + window.scrollY >=
+      window.innerHeight + window.scrollTop !==
       document.body.offsetHeight - 1000
     ) {
       setNewImages(true);
@@ -57,7 +58,6 @@ const Gallery = () => {
   }, [page]);
 
   useEffect(() => {
-    console.log("running page ");
     if (!mounted.current) {
       mounted.current = true;
       return;
@@ -69,7 +69,6 @@ const Gallery = () => {
 
   useEffect(() => {
     window.addEventListener("scroll", event);
-    console.log("scroll");
     return () => window.removeEventListener("scroll", event);
   }, []);
 
@@ -83,7 +82,7 @@ const Gallery = () => {
           search ? "search/" : ""
         }photos?client_id=${
           process.env.NEXT_PUBLIC_CLIENT_ID
-        }&per_page=12&&page=${page}&query=${q}`
+        }&per_page=16&&page=${page}&query=${q}`
       );
       const searchData = await response.json();
       setData(searchData.results);
@@ -110,20 +109,16 @@ const Gallery = () => {
           />
         ))}
       </div>
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        {isLoading ? (
-          <>
-            <Loading />
-            <Loading />
+      {isLoading ? (
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <Loading />
+          <Loading />
 
-            <Loading />
+          <Loading />
 
-            <Loading />
-          </>
-        ) : (
-          ""
-        )}
-      </div>
+          <Loading />
+        </div>
+      ) : null}
     </>
   );
 };
