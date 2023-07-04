@@ -81,8 +81,8 @@ const Gallery = () => {
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_URL}${
           search ? "search/" : ""
-        }photos?client_id=${process.env.NEXT_PUBLIC_CLIENT_ID}&client_secret=${
-          process.env.NEXT_PUBLIC_CLIENT_SECRET
+        }photos?client_id=${
+          process.env.NEXT_PUBLIC_CLIENT_ID
         }&per_page=12&&page=${page}&query=${q}`
       );
       const searchData = await response.json();
