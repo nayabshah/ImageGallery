@@ -31,7 +31,7 @@ const Gallery = () => {
       const newData = response.data;
       const finalData = newData.results ? newData.results : newData;
       setIsLoading(false);
-      setPage((prevPage) => prevPage++);
+
       setData((prevItems) => [...new Set([...prevItems, ...finalData])]);
     } catch (error) {
       console.log(error);
@@ -47,6 +47,7 @@ const Gallery = () => {
       document.body.offsetHeight - 1000
     ) {
       fetchData();
+      setPage((prevPage) => prevPage + 1);
     }
   };
 
